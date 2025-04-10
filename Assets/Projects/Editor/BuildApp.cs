@@ -13,4 +13,18 @@ public static class BuildApp
             BuildOptions.None
         );
     }
+    
+    [MenuItem("Build/WebGL")]
+    public static void BuildWebGL()
+    {
+		//ビルドパイプライン設定
+		var buildPlayerOptions = new BuildPlayerOptions
+		{
+			scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
+			locationPathName = "WebGL Builds",
+			target = BuildTarget.WebGL,
+			options = BuildOptions.Development
+		};
+		BuildPipeline.BuildPlayer(buildPlayerOptions);
+    }
 }
