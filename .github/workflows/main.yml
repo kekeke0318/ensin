@@ -1,48 +1,39 @@
-name: Actions 😎
+name: Build App windows
 
-on: [push, pull_request]
+on:
+  workflow_dispatch: { }
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  build:
-    name: Build my project ✨
-    runs-on: ubuntu-latest
+  buildForWindowsBasedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: [ self-hosted, Windows ]
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+        buildMethod:
+          - BuildApp.Build
+        unityPath:
+          - '"C:\Program Files\Unity\Hub\Editor\6000.0.38f1\Editor\Unity.exe"' #使用しているUnityのバージョンのパス
     steps:
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           lfs: true
+          clean: false
+          submodules: recursive
 
-      # Cache
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
+      - name: Run Build
+        run: |
+          ${{ matrix.unityPath }} -batchmode -quit -projectPath . -buildTarget ${{matrix.targetPlatform}} -executeMethod ${{ matrix.buildMethod }} -logFile -
 
-      # Test
-      - name: Run tests
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      - name: Upload App
+        uses: actions/upload-artifact@v3
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          name: App_Develop
+          path: Builds/App/
+          retention-days: 7
 
-      # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: WebGL
-
-      # Output
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build
-          path: build
