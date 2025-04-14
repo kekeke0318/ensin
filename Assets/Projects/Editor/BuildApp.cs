@@ -1,5 +1,7 @@
 using System.Linq;
+using Unity.Play.Publisher.Editor;
 using UnityEditor;
+using UnityEngine;
 
 public static class BuildApp 
 {
@@ -27,5 +29,19 @@ public static class BuildApp
 			options = BuildOptions.Development
 		};
 		BuildPipeline.BuildPlayer(buildPlayerOptions);
+    }
+
+    [MenuItem("Build/Publish WebGL")]
+    public static void PublishWebGL()
+    {
+	    var window = EditorWindow.GetWindow<PublisherWindow>();
+	    string buildPath = PublisherUtils.GetFirstValidBuildPath();
+	    window.Dispatch(new PublishStartAction() { title = GetGameTitleFromPath(buildPath), buildPath = buildPath });
+    }
+
+    static string GetGameTitleFromPath(string buildPath)
+    {
+	    if (!buildPath.Contains("/")) { return buildPath; }
+	    return buildPath.Split('/').Last();
     }
 }
