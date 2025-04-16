@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class Actor : MonoBehaviour
 {
     public Vector2 velocity;
@@ -9,5 +10,14 @@ public class Actor : MonoBehaviour
     {
         velocity.y += gravity * deltaTime;
         transform.position += (Vector3)(velocity * deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        var star = other.GetComponent<Star>();
+        if (star != null)
+        {
+            star.Collect();
+        }
     }
 }

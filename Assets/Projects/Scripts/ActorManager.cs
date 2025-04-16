@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using MessagePipe;
+using VContainer.Unity;
 
-public class ActorManager
+public class ActorManager : IInitializable, System.IDisposable
 {
     public List<Actor> actors = new List<Actor>();
 
-    private IDisposable launchEventSubscription;
+    private IDisposable _disposable;
 
     // コンストラクタで GlobalMessagePipe を利用してイベント購読
     public ActorManager()
     {
-        var subscriber = GlobalMessagePipe.GetSubscriber<ActorLaunchedEvent>();
-        launchEventSubscription = subscriber.Subscribe(OnActorLaunched);
     }
 
     private void OnActorLaunched(ActorLaunchedEvent e)
@@ -29,5 +28,18 @@ public class ActorManager
         {
             actor.UpdateActor(deltaTime);
         }
+    }
+
+    public void Initialize()
+    {
+        var bag = DisposableBag.CreateBuilder();
+        var subscriber = GlobalMessagePipe.GetSubscriber<ActorLaunchedEvent>();
+        subscriber.Subscribe(OnActorLaunched).AddTo(bag);
+        _disposable = bag.Build();
+    }
+
+    public void Dispose()
+    {
+        _disposable?.Dispose();
     }
 }

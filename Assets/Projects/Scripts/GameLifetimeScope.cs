@@ -5,23 +5,36 @@ using UnityEngine;
 
 public class GameLifetimeScope : LifetimeScope
 {
-    [SerializeField] 
-    private StageData stageDataAsset;  // エディタ上で各ステージデータを設定できるようにする
-    
+    [SerializeField]
+    private StageData stageDataAsset; // エディタ上で各ステージの設定データをセットする
+
     protected override void Configure(IContainerBuilder builder)
     {
-        // MessagePipe のセットアップ（GlobalMessagePipe 経由でイベントの発行／購読を行う）
-        builder.RegisterMessagePipe();
+        // MessagePipe の初期設定
+        var options = builder.RegisterMessagePipe();
+        options.EnableCaptureStackTrace = true;
 
-        builder.RegisterEntryPoint<GameEntryPoint>();
-        
-        // 通常クラスとして各 Manager をシングルトンで登録
-        builder.Register<ActorManager>(Lifetime.Singleton);
+        // ピュアな Manager クラスをシングルトンとして登録
+        builder.Register<ActorManager>(Lifetime.Singleton); // ActorManager の実装は前回の通り
         builder.Register<StarManager>(Lifetime.Singleton);
-        
-        // MotherPresenter をシングルトンとして登録。ここでステージデータを DI する
+
+        // MotherPresenter をピュアなクラスとして登録。ステージデータを渡して初期化
         builder.RegisterInstance(new MotherPresenter(stageDataAsset))
-            .AsSelf()
-            .AsImplementedInterfaces();  // 必要ならインターフェースとしても登録
+            .AsSelf();
+
+        // StageManager を登録。StarManager と MotherPresenter、そして同じステージデータを注入
+        builder.Register<StageManager>(Lifetime.Singleton);
+
+        // GameEntryPoint 等のエントリーポイントは別途登録する
+        builder.RegisterEntryPoint<GameEntryPoint>();
+
+        Star[] stars =
+            this.transform.GetComponentsInChildren<Star>(includeInactive: true);
+
+        //配列をそのまま一つのインスタンスとして登録
+        builder.RegisterInstance(stars)
+            .AsSelf();
+
+        builder.RegisterBuildCallback(x => { GlobalMessagePipe.SetProvider(x.AsServiceProvider()); });
     }
 }
