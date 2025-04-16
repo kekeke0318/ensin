@@ -3,7 +3,9 @@
     "rootNamespace": "",
     "references": [
         "GUID:149cad238efed4f53ac932b1e9555356",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:902e0dacaa7f2f3408c9c186444f5644",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
     ],
     "includePlatforms": [
         "Editor"

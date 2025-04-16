@@ -1,6 +1,5 @@
-namespace AIBirthGame
-{
 using UnityEngine;
+using MessagePipe;
 
 public class InputController : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class InputController : MonoBehaviour
         }
         if (isDragging && Input.GetMouseButton(0))
         {
-            // ここでTrajectoryAssistを呼び出し、プレビューActorの位置や軌道予測を更新する処理を実装
+            // プレビューや軌道予測の更新処理（必要に応じて実装）
         }
         if (isDragging && Input.GetMouseButtonUp(0))
         {
@@ -27,13 +26,15 @@ public class InputController : MonoBehaviour
             Vector2 dragEndPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rawVector = dragEndPos - dragStartPos;
             Vector2 launchVector = SnapVector(rawVector);
-            // 発射処理を実施（例：Rigidbodyに力を加える等）
             Destroy(previewActor);
-            // MessagePipeを使い、「発射完了」イベントを発行する例も追加可能
+
+            // GlobalMessagePipe 経由で発射完了イベントを発行
+            var publisher = GlobalMessagePipe.GetPublisher<ActorLaunchedEvent>();
+            publisher.Publish(new ActorLaunchedEvent { LaunchVector = launchVector });
         }
     }
 
-    // スナップ処理（角度10°、強さ0.5単位）
+    // 角度10°、強さ0.5 単位のスナップ処理
     public Vector2 SnapVector(Vector2 raw)
     {
         float angle = Mathf.Atan2(raw.y, raw.x) * Mathf.Rad2Deg;
@@ -43,6 +44,4 @@ public class InputController : MonoBehaviour
         Vector2 snappedVector = new Vector2(Mathf.Cos(snappedAngle * Mathf.Deg2Rad), Mathf.Sin(snappedAngle * Mathf.Deg2Rad)) * snappedMagnitude;
         return snappedVector;
     }
-}
-
 }

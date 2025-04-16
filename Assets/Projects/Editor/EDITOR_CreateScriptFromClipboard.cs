@@ -38,7 +38,7 @@ public class EDITOR_CreateScriptFromClipboard
         }
 
         // Add or replace namespace
-        clipboardText = AddOrReplaceNamespace(clipboardText, NAMESPACE_NAME);
+        //clipboardText = AddOrReplaceNamespace(clipboardText, NAMESPACE_NAME);
 
         // Write the clipboard text to the new script file
         File.WriteAllText(filePath, clipboardText);
