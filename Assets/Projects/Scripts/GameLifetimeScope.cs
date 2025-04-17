@@ -24,8 +24,9 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<StageManager>(Lifetime.Singleton);
         
         // Hierarchy
-        builder.RegisterComponentInHierarchy<TrajectoryLine>();
-        builder.RegisterComponentInHierarchy<MainCamera>();
+        builder.RegisterComponentInHierarchy<TrajectoryLineView>();
+        builder.RegisterComponentInHierarchy<MainCameraView>();
+        builder.RegisterComponentInHierarchy<MotherView>();
 
         // GameEntryPoint 等のエントリーポイントは別途登録する
         builder.RegisterEntryPoint<GameEntryPoint>();

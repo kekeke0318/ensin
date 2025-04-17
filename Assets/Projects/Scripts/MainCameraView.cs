@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MainCamera : MonoBehaviour
+public class MainCameraView : MonoBehaviour
 {
     [SerializeField] Camera _cam;
 

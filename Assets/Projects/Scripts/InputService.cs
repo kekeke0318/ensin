@@ -8,13 +8,13 @@ using VContainer;
 public class InputService
 {
     StageData _stageData;
-    [Inject] MainCamera _mainCamera;
+    [Inject] MotherView _motherView;
+    [Inject] MainCameraView _mainCameraView;
     [Inject] GlobalMessage _globalMessage;
-    [Inject] TrajectoryLine _trajectoryLine; // Scene 上の LineRenderer を DI
+    [Inject] TrajectoryLineView _trajectoryLineView; // Scene 上の LineRenderer を DI
 
     Vector2 dragStartPos;
     bool isDragging;
-    GameObject previewActor;
     TrajectoryAssist _assist;
 
     public InputService(StageData stageData)
@@ -28,27 +28,25 @@ public class InputService
         // ドラッグ開始
         if (Input.GetMouseButtonDown(0))
         {
-            dragStartPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            previewActor = Object.Instantiate(
-                _stageData.previewActorPrefab,
-                dragStartPos,
-                Quaternion.identity);
-
+            dragStartPos = _motherView.Position;
             isDragging = true;
         }
 
         // ドラッグ中 ― 軌道を予測描画
         if (isDragging && Input.GetMouseButton(0))
         {
-            Vector2 dragNow = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dragNow = _mainCameraView.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rawVector = dragNow - dragStartPos;
-            EnsinLog.Info(rawVector);
             Vector2 launchVector = SnapVector(rawVector);
 
-            Vector2[] points = _assist.SimulateTrajectory(dragStartPos, launchVector);
-            _trajectoryLine.SetPositionCount(points.Length);
+            _trajectoryLineView.SetPositionCount(2);
+            _trajectoryLineView.SetPosition(0, dragStartPos);
+            _trajectoryLineView.SetPosition(1, dragNow);
+            
+            /*Vector2[] points = _assist.SimulateTrajectory(dragStartPos, launchVector);
+            _trajectoryLineView.SetPositionCount(points.Length);
             for (int i = 0; i < points.Length; i++)
-                _trajectoryLine.SetPosition(i, points[i]);
+                _trajectoryLineView.SetPosition(i, points[i]);*/
         }
 
         // ドラッグ終了 ― 発射
@@ -56,15 +54,11 @@ public class InputService
         {
             isDragging = false;
 
-            Vector2 dragEndPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dragEndPos = _mainCameraView.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rawVector = dragEndPos - dragStartPos;
-            
             Vector2 launchVector = SnapVector(rawVector);
-            EnsinLog.Info(rawVector);
-            EnsinLog.Info(launchVector);
-
-            Object.Destroy(previewActor);
-            if (_trajectoryLine != null) _trajectoryLine.SetPositionCount(0);
+            
+            if (_trajectoryLineView != null) _trajectoryLineView.SetPositionCount(0);
 
             _globalMessage.actorLaunchedPub
                 .Publish(new ActorLaunchedEvent { LaunchVector = launchVector });

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449b2f92e3142874c98db2b491eb5eb2, type: 3}
+  m_Name: StageBuildConfig
+  m_EditorClassIdentifier: 
+  stageDataAsset: {fileID: 11400000, guid: 1a3db9974f06cfd47a5e39bc57ca673a, type: 2}
+  sceneOutputFolder: Assets/Scenes
+  randomizeGimmicks: 0
+  gimmickSpawnMin: {x: -3, y: -3}
+  gimmickSpawnMax: {x: 3, y: 3}
+  randomizeTargets: 1
+  targetPrefab: {fileID: 6595841577531406024, guid: b62a39f4384cb2a44b160c6998ab9488, type: 3}
+  targetCount: 3
+  targetSpawnMin: {x: -5, y: -5}
+  targetSpawnMax: {x: 5, y: 5}
+  placeCustomPrefabs: 1
+  customPrefabs:
+  - {fileID: 8491873044937699260, guid: 634c14525f7c4734d9968e8d67ec632a, type: 3}
+  - {fileID: 7546053817134773014, guid: 9ae126ee53d7dcf409416a594db355d4, type: 3}
+  - {fileID: 2843916082958682187, guid: bfd78010600ebed46b9be473df088023, type: 3}
+  - {fileID: 1153057893048904483, guid: e16492c263dcf2442aea1bf5049d846e, type: 3}
+  - {fileID: 8651464145357591115, guid: a87713c891197f3468ddbf2017d3b4a8, type: 3}
+  customPrefabSpawnMin: {x: -5, y: -5}
+  customPrefabSpawnMax: {x: 5, y: 5}

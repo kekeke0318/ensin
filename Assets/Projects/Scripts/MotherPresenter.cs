@@ -1,13 +1,23 @@
+using Cysharp.Threading.Tasks;
+using MessagePipe;
 using UnityEngine;
+using VContainer;
 
-public class MotherPresenter
+public class MotherPresenter : Presenter
 {
+    [Inject] GlobalMessage _globalMessage;
+    
     private readonly StageData stageData;
     
     // コンストラクタで対応するステージデータを DI 経由などで受け取る
     public MotherPresenter(StageData stageData)
     {
         this.stageData = stageData;
+
+        AddDisposable(_globalMessage.actorLaunchedSub.Subscribe(x =>
+        {
+            
+        }));
     }
     
     // クリア時の会話演出を実行

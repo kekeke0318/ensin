@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class TrajectoryLine : MonoBehaviour
+public class TrajectoryLineView : MonoBehaviour
 {
     [SerializeField] LineRenderer _renderer;
 
