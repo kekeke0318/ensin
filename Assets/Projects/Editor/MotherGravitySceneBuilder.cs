@@ -159,7 +159,7 @@ public class MotherGravitySceneBuilder : EditorWindow
                 targetInstance.transform.position = spawnPos;
             }
         }
-
+        
         // 必要に応じて、タイムリミットや目標 Star 数など他の StageData に基づくオブジェクト配置処理を追加可能
 
         // シーン保存（既存シーンがあれば上書き）
