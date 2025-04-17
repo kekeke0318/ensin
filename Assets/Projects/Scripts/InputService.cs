@@ -7,25 +7,28 @@ using VContainer;
 /// </summary>
 public class InputService
 {
-    [Inject] StageData _stageData;
+    StageData _stageData;
+    [Inject] MainCamera _mainCamera;
     [Inject] GlobalMessage _globalMessage;
-    [Inject] LineRenderer _trajectoryLine;   // Scene 上の LineRenderer を DI
+    [Inject] TrajectoryLine _trajectoryLine; // Scene 上の LineRenderer を DI
 
     Vector2 dragStartPos;
     bool isDragging;
     GameObject previewActor;
     TrajectoryAssist _assist;
 
+    public InputService(StageData stageData)
+    {
+        _stageData = stageData;
+        _assist = new TrajectoryAssist(_stageData.gravity);
+    }
+    
     public void Update()
     {
-        // StageData が注入されたタイミングで TrajectoryAssist を初期化
-        if (_assist == null && _stageData != null)
-            _assist = new TrajectoryAssist(_stageData.gravity);
-
         // ドラッグ開始
         if (Input.GetMouseButtonDown(0))
         {
-            dragStartPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dragStartPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
             previewActor = Object.Instantiate(
                 _stageData.previewActorPrefab,
                 dragStartPos,
@@ -37,17 +40,14 @@ public class InputService
         // ドラッグ中 ― 軌道を予測描画
         if (isDragging && Input.GetMouseButton(0))
         {
-            Vector2 dragNow     = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 rawVector   = dragNow - dragStartPos;
+            Vector2 dragNow = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 rawVector = dragNow - dragStartPos;
             Vector2 launchVector = SnapVector(rawVector);
 
-            if (_trajectoryLine != null)
-            {
-                Vector2[] points = _assist.SimulateTrajectory(dragStartPos, launchVector);
-                _trajectoryLine.positionCount = points.Length;
-                for (int i = 0; i < points.Length; i++)
-                    _trajectoryLine.SetPosition(i, points[i]);
-            }
+            Vector2[] points = _assist.SimulateTrajectory(dragStartPos, launchVector);
+            _trajectoryLine.SetPositionCount(points.Length);
+            for (int i = 0; i < points.Length; i++)
+                _trajectoryLine.SetPosition(i, points[i]);
         }
 
         // ドラッグ終了 ― 発射
@@ -55,12 +55,12 @@ public class InputService
         {
             isDragging = false;
 
-            Vector2 dragEndPos   = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 rawVector    = dragEndPos - dragStartPos;
+            Vector2 dragEndPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 rawVector = dragEndPos - dragStartPos;
             Vector2 launchVector = SnapVector(rawVector);
 
             Object.Destroy(previewActor);
-            if (_trajectoryLine != null) _trajectoryLine.positionCount = 0;
+            if (_trajectoryLine != null) _trajectoryLine.SetPositionCount(0);
 
             _globalMessage.actorLaunchedPub
                 .Publish(new ActorLaunchedEvent { LaunchVector = launchVector });
@@ -70,10 +70,10 @@ public class InputService
     // 角度 10°・強さ 0.5 単位でスナップ
     Vector2 SnapVector(Vector2 raw)
     {
-        float angle          = Mathf.Atan2(raw.y, raw.x) * Mathf.Rad2Deg;
-        float snappedAngle   = Mathf.Round(angle / 10f) * 10f;
-        float magnitude      = raw.magnitude;
-        float snappedMag     = Mathf.Round(magnitude / 0.5f) * 0.5f;
+        float angle = Mathf.Atan2(raw.y, raw.x) * Mathf.Rad2Deg;
+        float snappedAngle = Mathf.Round(angle / 10f) * 10f;
+        float magnitude = raw.magnitude;
+        float snappedMag = Mathf.Round(magnitude / 0.5f) * 0.5f;
         return new Vector2(
             Mathf.Cos(snappedAngle * Mathf.Deg2Rad),
             Mathf.Sin(snappedAngle * Mathf.Deg2Rad)) * snappedMag;

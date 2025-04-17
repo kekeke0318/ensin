@@ -17,7 +17,7 @@ public class GameEntryPoint : IAsyncStartable
     public async UniTask StartAsync(CancellationToken ct)
     {
         // シンプルな更新ループ例（実際は UniTask やコルーチンで実装）
-        while (true)
+        while (ct.IsCancellationRequested == false)
         {
             // ここでイベントを受け取っていたらアクター生成
             // if文を使わずUniRxもしくはUniTaskで実現したい
