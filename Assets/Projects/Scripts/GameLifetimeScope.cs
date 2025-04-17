@@ -5,24 +5,22 @@ using UnityEngine;
 
 public class GameLifetimeScope : LifetimeScope
 {
-    [SerializeField]
-    private StageData stageDataAsset; // エディタ上で各ステージの設定データをセットする
+    [SerializeField] private StageData stageDataAsset;
 
     protected override void Configure(IContainerBuilder builder)
     {
         // MessagePipe の初期設定
         var options = builder.RegisterMessagePipe();
-        options.EnableCaptureStackTrace = true;
-
+        
+        builder.RegisterInstance(stageDataAsset);
+        
         // ピュアな Manager クラスをシングルトンとして登録
-        builder.Register<ActorManager>(Lifetime.Singleton); // ActorManager の実装は前回の通り
+        builder.Register<InputService>(Lifetime.Transient);
+        builder.Register<GlobalFactory>(Lifetime.Singleton);
+        builder.Register<GlobalMessage>(Lifetime.Singleton);
+        builder.Register<ActorManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<StarManager>(Lifetime.Singleton);
-
-        // MotherPresenter をピュアなクラスとして登録。ステージデータを渡して初期化
-        builder.RegisterInstance(new MotherPresenter(stageDataAsset))
-            .AsSelf();
-
-        // StageManager を登録。StarManager と MotherPresenter、そして同じステージデータを注入
+        builder.Register<MotherPresenter>(Lifetime.Singleton);
         builder.Register<StageManager>(Lifetime.Singleton);
 
         // GameEntryPoint 等のエントリーポイントは別途登録する
@@ -34,7 +32,13 @@ public class GameLifetimeScope : LifetimeScope
         //配列をそのまま一つのインスタンスとして登録
         builder.RegisterInstance(stars)
             .AsSelf();
-
-        builder.RegisterBuildCallback(x => { GlobalMessagePipe.SetProvider(x.AsServiceProvider()); });
+        
+        builder.RegisterFactory<Vector2, Actor>(container => (launchVector) =>
+            {
+                var actor = Instantiate(stageDataAsset.actorPrefab, Vector2.zero, Quaternion.identity);
+                actor.velocity = launchVector;
+                return actor;
+            },
+            Lifetime.Singleton);
     }
 }

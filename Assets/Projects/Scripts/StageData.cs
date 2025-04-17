@@ -4,14 +4,23 @@ using UnityEngine;
 public class StageData : ScriptableObject
 {
     public int stageID;
-    public float gravity;
-    public float timeLimit;         // 追加設定例：制限時間
-    public int targetStarCount;     // 追加設定例：必要な Star 数
 
-    public DialogueSet dialogueSet; // 会話内容（クリア、失敗、エンディングなど）
-    
-    // ギミック情報：配置する各ギミックの prefab と位置／回転
+    [Header("重力値")]
+    public float gravity;
+
+    [Header("必要な Star 数")]
+    public int targetStarCount;
+
+    [Header("ステージ毎のActorのプレファブ")]
+    public Actor actorPrefab;
+
+    [Header("ステージ毎の会話セット")]
+    public DialogueSet dialogueSet;
+
+    [Header("ステージ毎のギミック")]
     public GimmickData[] gimmicks;
+
+    public GameObject previewActorPrefab;
 }
 
 [System.Serializable]
@@ -19,6 +28,7 @@ public class DialogueSet
 {
     public string dialogueClear;
     public string dialogueFail;
+
     public string endingDialogue;
     // 必要に応じて、他の会話設定を追加可能
 }

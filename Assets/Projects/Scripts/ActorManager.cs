@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using MessagePipe;
+using VContainer;
 using VContainer.Unity;
 
 public class ActorManager : IInitializable, System.IDisposable
 {
+    [Inject] GlobalFactory _globalFactory; 
+    [Inject] GlobalMessage _globalMessage; 
+    
     public List<Actor> actors = new List<Actor>();
 
     private IDisposable _disposable;
@@ -17,7 +21,7 @@ public class ActorManager : IInitializable, System.IDisposable
     private void OnActorLaunched(ActorLaunchedEvent e)
     {
         // 発射イベント受信時、ActorFactory を利用して Actor を生成
-        var actor = ActorFactory.CreateActor(e.LaunchVector);
+        var actor = _globalFactory.CreateActor(e.LaunchVector);
         actors.Add(actor);
     }
 
@@ -33,8 +37,7 @@ public class ActorManager : IInitializable, System.IDisposable
     public void Initialize()
     {
         var bag = DisposableBag.CreateBuilder();
-        var subscriber = GlobalMessagePipe.GetSubscriber<ActorLaunchedEvent>();
-        subscriber.Subscribe(OnActorLaunched).AddTo(bag);
+        _globalMessage.actorLaunchedSub.Subscribe(OnActorLaunched).AddTo(bag);
         _disposable = bag.Build();
     }
 

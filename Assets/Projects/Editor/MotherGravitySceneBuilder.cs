@@ -109,10 +109,6 @@ public class MotherGravitySceneBuilder : EditorWindow
             Debug.LogWarning("GameLifetimeScope に stageDataAsset フィールドが見つかりません。手動でアサインしてください。");
         }
 
-        // InputController を保持する GameObject の作成
-        GameObject inputControllerGO = new GameObject("InputController");
-        inputControllerGO.AddComponent<InputController>();
-
         // ギミック配置用のコンテナ作成
         GameObject gimmickContainer = new GameObject("GimmickContainer");
 

@@ -1,22 +1,35 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using VContainer;
+using MessagePipe;
 
-public class StarManager
+public class StarManager : Presenter
 {
-    List<Star> _stars = new List<Star>();
+    [Inject] GlobalMessage _globalMessage;
 
-    public StarManager(Star[] stars)
+    public bool AreAllStarsCollected => obtainedCount == starCountTotal;
+    
+    private int starCountTotal;
+    int obtainedCount;
+
+    public void Initialize(int totalStars)
     {
-        _stars.AddRange(stars);
+        starCountTotal = totalStars;
+        
+        _globalMessage.hitStarSub.Subscribe(e =>
+        {
+            obtainedCount++;
+            if (obtainedCount >= starCountTotal)
+            {
+                OnAllStarsObtained();
+            }
+        });
     }
 
-    // 全 Star 取得済みか判定
-    public bool AreAllStarsCollected()
+    private void OnAllStarsObtained()
     {
-        foreach (var star in _stars)
-        {
-            if (!star.isCollected)
-                return false;
-        }
-        return true;
+        // ここでクリアイベントや遷移をPublishしたり、GameEntryPointに伝える
+        Debug.Log("All Stars Obtained! Game Clear!");
     }
 }

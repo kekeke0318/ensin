@@ -18,7 +18,7 @@ public class StageManager
     public async UniTask EvaluateStageAsync()
     {
         // StarManager 側で全 Star の取得を判定
-        bool allCollected = starManager.AreAllStarsCollected();
+        bool allCollected = starManager.AreAllStarsCollected;
         
         // 結果判定前に少し待機（演出のための余裕時間など）
         await UniTask.Delay(500);
