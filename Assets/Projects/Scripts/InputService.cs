@@ -42,6 +42,7 @@ public class InputService
         {
             Vector2 dragNow = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rawVector = dragNow - dragStartPos;
+            EnsinLog.Info(rawVector);
             Vector2 launchVector = SnapVector(rawVector);
 
             Vector2[] points = _assist.SimulateTrajectory(dragStartPos, launchVector);
@@ -57,7 +58,10 @@ public class InputService
 
             Vector2 dragEndPos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rawVector = dragEndPos - dragStartPos;
+            
             Vector2 launchVector = SnapVector(rawVector);
+            EnsinLog.Info(rawVector);
+            EnsinLog.Info(launchVector);
 
             Object.Destroy(previewActor);
             if (_trajectoryLine != null) _trajectoryLine.SetPositionCount(0);

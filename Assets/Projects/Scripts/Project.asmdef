@@ -19,7 +19,8 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "UNITASK_DOTWEEN_SUPPORT"
+        "UNITASK_DOTWEEN_SUPPORT",
+        "ENSIN_DEBUG_LOG"
     ],
     "versionDefines": [],
     "noEngineReferences": false
