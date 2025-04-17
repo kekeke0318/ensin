@@ -4,21 +4,21 @@ using VContainer;
 [RequireComponent(typeof(Collider2D))]
 public class Actor : MonoBehaviour
 {
-    public Vector2 velocity;
+    Vector2 _velocity;
 
-    GravityField _gravityField;
-
-    public void SetGravityField(GravityField gravityField)
+    public void AddVelocity(Vector2 velocity)
     {
-        _gravityField = gravityField;
+        _velocity += velocity;
     }
-
+    
+    public void SetVelocity(Vector2 velocity)
+    {
+        _velocity = velocity;
+    }
+    
     public void UpdateActor(float deltaTime)
     {
-        // 中心重力
-            velocity += _gravityField.GetForce(transform.position) * deltaTime;
-
-        transform.position += (Vector3)(velocity * deltaTime);
+        transform.position += (Vector3)(_velocity * deltaTime);
     }
 
     void OnTriggerEnter2D(Collider2D other)

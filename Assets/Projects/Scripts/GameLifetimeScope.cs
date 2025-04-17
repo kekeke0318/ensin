@@ -41,7 +41,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterFactory<Vector2, Actor>(container => (launchVector) =>
             {
                 var actor = Instantiate(stageDataAsset.actorPrefab, Vector2.zero, Quaternion.identity);
-                actor.velocity = launchVector;
+                actor.SetVelocity(launchVector);
                 return actor;
             },
             Lifetime.Singleton);
