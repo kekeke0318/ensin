@@ -22,6 +22,7 @@ public class ActorManager : IInitializable, System.IDisposable
     {
         // 発射イベント受信時、ActorFactory を利用して Actor を生成
         var actor = _globalFactory.CreateActor(e.LaunchVector);
+        actor.SetPosition(e.Position);
         actors.Add(actor);
     }
 

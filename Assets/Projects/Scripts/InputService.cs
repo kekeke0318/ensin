@@ -42,11 +42,6 @@ public class InputService
             _trajectoryLineView.SetPositionCount(2);
             _trajectoryLineView.SetPosition(0, dragStartPos);
             _trajectoryLineView.SetPosition(1, dragNow);
-            
-            /*Vector2[] points = _assist.SimulateTrajectory(dragStartPos, launchVector);
-            _trajectoryLineView.SetPositionCount(points.Length);
-            for (int i = 0; i < points.Length; i++)
-                _trajectoryLineView.SetPosition(i, points[i]);*/
         }
 
         // ドラッグ終了 ― 発射
@@ -61,7 +56,7 @@ public class InputService
             if (_trajectoryLineView != null) _trajectoryLineView.SetPositionCount(0);
 
             _globalMessage.actorLaunchedPub
-                .Publish(new ActorLaunchedEvent { LaunchVector = launchVector });
+                .Publish(new ActorLaunchedEvent { Position =  dragStartPos, LaunchVector = launchVector });
         }
     }
 
