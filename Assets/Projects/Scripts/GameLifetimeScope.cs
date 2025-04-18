@@ -22,12 +22,13 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<StarManager>(Lifetime.Singleton);
         builder.Register<MotherPresenter>(Lifetime.Singleton);
         builder.Register<StageManager>(Lifetime.Singleton);
+        builder.Register<StageRetryUseCase>(Lifetime.Singleton);
         
         // Hierarchy
         builder.RegisterComponentInHierarchy<TrajectoryLineView>();
         builder.RegisterComponentInHierarchy<MainCameraView>();
         builder.RegisterComponentInHierarchy<MotherView>();
-
+        
         // GameEntryPoint 等のエントリーポイントは別途登録する
         builder.RegisterEntryPoint<GameEntryPoint>();
 
@@ -37,9 +38,9 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(stars)
             .AsSelf();
         
-        builder.RegisterFactory<Vector2, Actor>(container => (launchVector) =>
+        builder.RegisterFactory<Vector2, ActorView>(container => (launchVector) =>
             {
-                var actor = Instantiate(stageDataAsset.actorPrefab, Vector2.zero, Quaternion.identity);
+                var actor = Instantiate(stageDataAsset.actorViewPrefab, Vector2.zero, Quaternion.identity);
                 actor.SetVelocity(launchVector);
                 return actor;
             },

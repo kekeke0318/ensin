@@ -8,7 +8,6 @@ public static class AutoClearTmpSdf
 {
     static AutoClearTmpSdf()
     {
-        // プレイモードの状態が変わるたびにコールバック
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
     }
 

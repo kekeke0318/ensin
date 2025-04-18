@@ -12,7 +12,7 @@ public class StageData : ScriptableObject
     public int targetStarCount;
 
     [Header("ステージ毎のActorのプレファブ")]
-    public Actor actorPrefab;
+    public ActorView actorViewPrefab;
 
     [Header("ステージ毎の会話セット")]
     public DialogueSet dialogueSet;

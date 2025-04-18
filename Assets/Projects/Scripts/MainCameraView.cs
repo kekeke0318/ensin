@@ -2,7 +2,7 @@ using UnityEngine;
 using VContainer;
 
 /// <summary>
-/// Controls the main camera so that it moves smoothly after the latest launched <see cref="Actor"/>.
+/// Controls the main camera so that it moves smoothly after the latest launched <see cref="ActorView"/>.
 /// </summary>
 [RequireComponent(typeof(Camera))]
 public class MainCameraView : MonoBehaviour

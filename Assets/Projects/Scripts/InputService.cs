@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using MessagePipe;
 using R3;
@@ -13,6 +14,7 @@ public class InputService
     [Inject] MainCameraView _mainCameraView;
     [Inject] GlobalMessage _globalMessage;
     [Inject] TrajectoryLineView _trajectoryLineView; // Scene 上の LineRenderer を DI
+    [Inject] StageRetryUseCase _retryUseCase;
 
     Vector2 dragStartPos;
     bool isDragging;
@@ -23,7 +25,7 @@ public class InputService
         _stageData = stageData;
         _assist = new TrajectoryAssist(_stageData.gravity);
     }
-    
+
     public void Update()
     {
         // ドラッグ開始
@@ -53,11 +55,15 @@ public class InputService
             Vector2 dragEndPos = _mainCameraView.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rawVector = dragEndPos - dragStartPos;
             Vector2 launchVector = SnapVector(rawVector);
-            
+
             if (_trajectoryLineView != null) _trajectoryLineView.SetPositionCount(0);
 
             _globalMessage.actorLaunchedPub
-                .Publish(new ActorLaunchedEvent { Position =  dragStartPos, LaunchVector = launchVector });
+                .Publish(new ActorLaunchedEvent { Position = dragStartPos, LaunchVector = launchVector });
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
         }
     }
 
@@ -74,7 +80,7 @@ public class InputService
     }
 
     System.IDisposable _dispo;
-    
+
     public void SetEnabled(bool p0)
     {
         if (p0)

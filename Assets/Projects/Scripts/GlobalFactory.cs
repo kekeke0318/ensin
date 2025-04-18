@@ -4,9 +4,9 @@ using VContainer;
 
 public class GlobalFactory
 {
-    [Inject] System.Func<Vector2, Actor> _actorFactory;
+    [Inject] System.Func<Vector2, ActorView> _actorFactory;
 
-    public Actor CreateActor(Vector2 launchVector)
+    public ActorView CreateActor(Vector2 launchVector)
     {
         return _actorFactory(launchVector);
     }

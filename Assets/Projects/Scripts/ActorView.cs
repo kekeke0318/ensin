@@ -2,7 +2,7 @@ using UnityEngine;
 using VContainer;
 
 [RequireComponent(typeof(Collider2D))]
-public class Actor : MonoBehaviour
+public class ActorView : MonoBehaviour
 {
     Vector2 _velocity;
 

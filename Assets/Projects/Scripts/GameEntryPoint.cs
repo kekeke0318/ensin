@@ -18,6 +18,7 @@ public sealed class GameEntryPoint : IAsyncStartable, IDisposable
     [Inject] GameData _gameData;
     [Inject] StageData _stageData;
     [Inject] GlobalMessage _msg;
+    [Inject] StageRetryUseCase _retryUseCase;
 
     // disposable
     IDisposable _bag;
@@ -46,6 +47,12 @@ public sealed class GameEntryPoint : IAsyncStartable, IDisposable
             float dt = Time.deltaTime;
             _actorMgr.Update(dt);
             await UniTask.Yield(ct);
+        }
+
+        if (retryRequested)
+        {
+            // 演出付きリトライを非同期 fire‑and‑forget
+            await _retryUseCase.RetryAsync();
         }
 
         // ── Result ────────────────────────────────────────

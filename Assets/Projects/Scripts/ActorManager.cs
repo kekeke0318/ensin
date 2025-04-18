@@ -9,7 +9,7 @@ public class ActorManager : IInitializable, System.IDisposable
     [Inject] GlobalFactory _globalFactory; 
     [Inject] GlobalMessage _globalMessage; 
     
-    public List<Actor> actors = new List<Actor>();
+    public List<ActorView> actors = new List<ActorView>();
 
     private IDisposable _disposable;
 

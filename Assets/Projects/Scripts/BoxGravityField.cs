@@ -19,7 +19,7 @@ public class BoxGravityField : MonoBehaviour
         _t = transform;
         _triggerObject.OnTriggerStay2DAsObservable().Subscribe(other =>
         {
-            var actor = other.GetComponent<Actor>();
+            var actor = other.GetComponent<ActorView>();
             if (actor == null) return;
 
             // 速度に積分して「加速」させる

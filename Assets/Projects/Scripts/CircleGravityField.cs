@@ -23,7 +23,7 @@ public class CircleGravityField : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        var actor = other.GetComponent<Actor>();
+        var actor = other.GetComponent<ActorView>();
         if (actor == null) return;
 
         // 速度に積分して「加速」させる
