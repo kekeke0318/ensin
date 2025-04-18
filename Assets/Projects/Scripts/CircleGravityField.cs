@@ -29,10 +29,4 @@ public class CircleGravityField : MonoBehaviour
         // 速度に積分して「加速」させる
         actor.AddVelocity((transform.position - other.transform.position) * _power * Time.deltaTime);
     }
-
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-    }
-#endif
 }

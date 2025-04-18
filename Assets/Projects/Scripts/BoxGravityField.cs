@@ -26,10 +26,4 @@ public class BoxGravityField : MonoBehaviour
             actor.AddVelocity(acceleration * Time.deltaTime);
         }).AddTo(this);
     }
-
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-    }
-#endif
 }
