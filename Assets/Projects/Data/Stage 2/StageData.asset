@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb462c2e9cee8ce4abc45f32f4b20e0e, type: 3}
   m_Name: StageData
   m_EditorClassIdentifier: 
-  stageID: 0
+  stageID: 1
   gravity: 1
   targetStarCount: 10
   actorViewPrefab: {fileID: -4068511973161296121, guid: 415db9d7c1ac5c74b8b164360bd46062, type: 3}
@@ -22,4 +22,4 @@ MonoBehaviour:
     endingDialogue: c
   gimmicks: []
   previewActorPrefab: {fileID: 1970453099789913695, guid: c7dde020a3fb12e42b21f7e91901f5cc, type: 3}
-  isLast: 0
+  isLast: 1

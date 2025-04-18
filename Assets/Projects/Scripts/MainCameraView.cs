@@ -7,6 +7,8 @@ using VContainer;
 [RequireComponent(typeof(Camera))]
 public class MainCameraView : MonoBehaviour
 {
+    public Camera Cam => _cam;
+
     [SerializeField] Camera _cam;
     [SerializeField] bool _useFollow;
 
@@ -15,6 +17,7 @@ public class MainCameraView : MonoBehaviour
     float _smoothTime = 0.5f;
 
     Vector3 _velocity; // used by SmoothDamp
+    ICameraTarget _target;
 
     // ActorManager is injected from VContainer so we know which Actor to follow
     [Inject] ActorManager _actorManager;
@@ -27,19 +30,21 @@ public class MainCameraView : MonoBehaviour
 
     void LateUpdate()
     {
-        if (_actorManager == null || _actorManager.actors.Count == 0) return;
+        if (_target == null) return;
 
         if (_useFollow)
         {
-            // Always follow the most recently launched Actor (the one at the end of the list)
-            Transform target = _actorManager.actors[^1].transform;
-
             // Preserve the current Z so we don’t change the projection distance
-            Vector3 desired = new(target.position.x, target.position.y, _cam.transform.position.z);
+            Vector3 desired = new(_target.Transform.position.x, _target.Transform.position.y, _cam.transform.position.z);
 
             // Smoothly move the camera toward the desired position
             _cam.transform.position = Vector3.SmoothDamp(_cam.transform.position, desired, ref _velocity, _smoothTime);
         }
+    }
+
+    public void SetTarget(ICameraTarget t)
+    {
+        _target = t;
     }
 
     /// <summary>

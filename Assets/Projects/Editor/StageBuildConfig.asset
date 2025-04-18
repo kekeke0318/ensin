@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 449b2f92e3142874c98db2b491eb5eb2, type: 3}
   m_Name: StageBuildConfig
   m_EditorClassIdentifier: 
-  stageDataAsset: {fileID: 11400000, guid: 1a3db9974f06cfd47a5e39bc57ca673a, type: 2}
+  stageDataAsset: {fileID: 11400000, guid: 267db7a39d5ac2c43967702f86181d92, type: 2}
   sceneOutputFolder: Assets/Scenes
   randomizeGimmicks: 0
   gimmickSpawnMin: {x: -3, y: -3}
@@ -25,8 +25,8 @@ MonoBehaviour:
   placeCustomPrefabs: 1
   customPrefabs:
   - {fileID: 8491873044937699260, guid: 634c14525f7c4734d9968e8d67ec632a, type: 3}
+  - {fileID: 1876151694621752280, guid: 5e51ef1bf1b64f347aac875d799aee83, type: 3}
   - {fileID: 7546053817134773014, guid: 9ae126ee53d7dcf409416a594db355d4, type: 3}
-  - {fileID: 2843916082958682187, guid: bfd78010600ebed46b9be473df088023, type: 3}
   - {fileID: 1153057893048904483, guid: e16492c263dcf2442aea1bf5049d846e, type: 3}
   - {fileID: 8651464145357591115, guid: a87713c891197f3468ddbf2017d3b4a8, type: 3}
   customPrefabSpawnMin: {x: -5, y: -5}

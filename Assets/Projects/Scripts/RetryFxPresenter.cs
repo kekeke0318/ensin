@@ -8,29 +8,38 @@ using MessagePipe; // 演出呼び出し用メッセージにも対応させる�
 /// <summary>
 /// Mother を瞬時に Actor の位置へワープさせて抱っこ→フェードアウトする演出
 /// </summary>
-public sealed class RetryFxPresenter : MonoBehaviour
+public sealed class RetryFxPresenter : Presenter
 {
-    [SerializeField] MotherView mother;
-    [SerializeField] ActorView actorView;
-    [SerializeField] CanvasGroup fadeCanvas; // 真っ黒で α=0 の UI
+    [Inject] MainCameraView _mainCamera;
+    [Inject] MotherView _motherView;
+    [Inject] ActorManager _actorManager;
+    [SerializeField] CanvasGroup _fadeCanvas; // 真っ黒で α=0 の UI
 
     static readonly int Hug = Animator.StringToHash("Hug");
 
-    public async UniTask PlayAsync()
+    public RetryFxPresenter(GlobalMessage globalMessage)
     {
+    }
+
+    public async UniTask PlayAsync(CancellationToken ct)
+    {
+        _mainCamera.SetTarget(_motherView);
+        
         // ① ワープ
-        mother.transform.position = actorView.transform.position;
+        _motherView.transform.position = _actorManager.ActorView.Position;
+
+        await _motherView.transform.DOMove(_actorManager.ActorView.Position, 1);
 
         // ② 抱っこアニメ
-        var anim = mother.Anim;
+        var anim = _motherView.Anim;
         anim.ResetTrigger(Hug);
         anim.SetTrigger(Hug);
 
         // AnimatorUtility 拡張（下に定義）で終了待ち
-        await anim.WaitStateExitAsync("Hug", this.GetCancellationTokenOnDestroy());
+        await anim.WaitStateExitAsync("Hug", ct);
 
         // ③ フェードアウト
-        await fadeCanvas.DOFade(1, 0.25f).SetEase(Ease.InQuad);
+        await _fadeCanvas.DOFade(1, 0.25f).SetEase(Ease.InQuad);
     }
 }
 

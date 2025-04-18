@@ -1,10 +1,19 @@
+using System;
 using UnityEngine;
 using VContainer;
 
 [RequireComponent(typeof(Collider2D))]
-public class ActorView : MonoBehaviour
+public class ActorView : MonoBehaviour, ICameraTarget
 {
+    public Transform Transform { get; private set; }
+    public Vector2 Position => transform.position;
+    
     Vector2 _velocity;
+
+    void Awake()
+    {
+        Transform = transform;
+    }
 
     public void AddVelocity(Vector2 velocity)
     {

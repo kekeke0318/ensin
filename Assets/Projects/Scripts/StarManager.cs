@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-using VContainer;
-using MessagePipe;
+using R3;
 
 public class StarManager : Presenter
 {
@@ -14,21 +11,15 @@ public class StarManager : Presenter
     public StarManager(Star[] stars, GlobalMessage globalMessage)
     {
         starCountTotal = stars.Length;
-        EnsinLog.Info($"starCountTotal {starCountTotal}");
-        
-        globalMessage.hitStarSub.Subscribe(e =>
-        {
-            obtainedCount++;
-            if (obtainedCount >= starCountTotal)
-            {
-                OnAllStarsObtained();
-            }
-        });
-    }
 
-    private void OnAllStarsObtained()
-    {
-        // ここでクリアイベントや遷移をPublishしたり、GameEntryPointに伝える
-        Debug.Log("All Stars Obtained! Game Clear!");
+        foreach (var item in stars)
+        {
+            AddDisposable(item.OnHit.Subscribe(x =>
+            {
+                EnsinLog.Info($"starCountTotal {obtainedCount}, {starCountTotal}");
+
+                obtainedCount++;
+            }));
+        }
     }
 }

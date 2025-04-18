@@ -7,17 +7,29 @@
 //    に変更すると、Mother の座標から正しく Actor がスポーンします。
 // ------------------------------------------------------------
 
+using System;
 using UnityEngine;
 using MessagePipe;
 using VContainer;
 using VContainer.Unity;
 
-public class MotherView : MonoBehaviour
+public interface ICameraTarget
+{
+    Transform Transform { get; }
+}
+
+public class MotherView : MonoBehaviour, ICameraTarget
 {
     [SerializeField] Animator _anim;
-    
+
+    public Transform Transform { get; private set; }
     public Vector2 Position => transform.position;
     public Animator Anim => _anim;
+
+    void Awake()
+    {
+        Transform = transform;
+    }
 
 #if UNITY_EDITOR
     // エディタ上で Mother の位置を可視化

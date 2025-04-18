@@ -19,5 +19,7 @@ public class Star : MonoBehaviour
 
         // オプション：見た目を非表示にするなど
         gameObject.SetActive(false);
+        
+        _onHit.OnNext(Unit.Default);
     }
 }

@@ -6,10 +6,10 @@ using VContainer.Unity;
 
 public class ActorManager : IInitializable, System.IDisposable
 {
-    [Inject] GlobalFactory _globalFactory; 
-    [Inject] GlobalMessage _globalMessage; 
-    
-    public List<ActorView> actors = new List<ActorView>();
+    [Inject] GlobalFactory _globalFactory;
+    [Inject] GlobalMessage _globalMessage;
+
+    public ActorView ActorView { get; private set; }
 
     private IDisposable _disposable;
 
@@ -20,19 +20,17 @@ public class ActorManager : IInitializable, System.IDisposable
 
     private void OnActorLaunched(ActorLaunchedEvent e)
     {
+        if (ActorView != null) return;
+
         // 発射イベント受信時、ActorFactory を利用して Actor を生成
-        var actor = _globalFactory.CreateActor(e.LaunchVector);
-        actor.SetPosition(e.Position);
-        actors.Add(actor);
+        ActorView = _globalFactory.CreateActor(e.LaunchVector);
+        ActorView.SetPosition(e.Position);
     }
 
     // ゲームループ内から定期的に呼ばれる更新処理
     public void Update(float deltaTime)
     {
-        foreach (var actor in actors)
-        {
-            actor.UpdateActor(deltaTime);
-        }
+        ActorView.UpdateActor(deltaTime);
     }
 
     public void Initialize()

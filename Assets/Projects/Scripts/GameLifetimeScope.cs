@@ -15,7 +15,6 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(stageDataAsset);
         
         // ピュアな Manager クラスをシングルトンとして登録
-        builder.Register<InputService>(Lifetime.Transient);
         builder.Register<GlobalFactory>(Lifetime.Singleton);
         builder.Register<GlobalMessage>(Lifetime.Singleton);
         builder.Register<ActorManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
@@ -23,8 +22,10 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<MotherPresenter>(Lifetime.Singleton);
         builder.Register<StageManager>(Lifetime.Singleton);
         builder.Register<StageRetryUseCase>(Lifetime.Singleton);
+        builder.Register<RetryFxPresenter>(Lifetime.Singleton);
         
         // Hierarchy
+        builder.RegisterComponentInHierarchy<InputController>();
         builder.RegisterComponentInHierarchy<TrajectoryLineView>();
         builder.RegisterComponentInHierarchy<MainCameraView>();
         builder.RegisterComponentInHierarchy<MotherView>();

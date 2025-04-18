@@ -6,40 +6,52 @@ using Cysharp.Threading.Tasks;
 using VContainer;
 using VContainer.Unity;
 using MessagePipe;
+using R3;
+using DisposableBag = MessagePipe.DisposableBag;
 
-public sealed class GameEntryPoint : IAsyncStartable, IDisposable
+public sealed class GameEntryPoint : IInitializable, IAsyncStartable, IDisposable
 {
     // 依存
-    [Inject] InputService _input;
     [Inject] ActorManager _actorMgr;
     [Inject] StarManager _starMgr;
+    [Inject] MainCameraView _mainCamera;
     [Inject] StageManager _stageMgr;
     [Inject] MotherPresenter _mother;
+    [Inject] MotherView _motherView;
+    [Inject] TrajectoryLineView _trajectoryLine;
     [Inject] GameData _gameData;
     [Inject] StageData _stageData;
     [Inject] GlobalMessage _msg;
     [Inject] StageRetryUseCase _retryUseCase;
+    [Inject] InputController _input;
 
     // disposable
     IDisposable _bag;
 
+    public void Initialize()
+    {
+        _input.SetTrajectoryLine(_trajectoryLine);
+        _input.SetCamera(_mainCamera.Cam);
+    }
+
     public async UniTask StartAsync(CancellationToken ct)
     {
+
         var bag = DisposableBag.CreateBuilder();
 
         // ── Intro ─────────────────────────────────────────
-        _input.SetEnabled(false);
         await _mother.PresentIntroDialogue(); // 会話開始
 
         // ── Aiming ────────────────────────────────────────
-        _input.SetEnabled(true);
+        _input.SetDragStartPos(_motherView.Position);
+        _input.OnShootInput.Subscribe(_msg.actorLaunchedPub.Publish).AddTo(ct);
         await _msg.actorLaunchedSub.FirstAsync(ct); // 発射を待つ
 
         // ── Flying ────────────────────────────────────────
-        _input.SetEnabled(false);
-
         bool retryRequested = false;
-        _msg.retryRequestedSub.Subscribe(_ => retryRequested = true).AddTo(bag);
+        var retryDisposable = _msg.retryRequestedSub.Subscribe(_ => retryRequested = true);
+        retryDisposable.AddTo(bag);
+        bag.Add(_input.OnRetryInput.Subscribe(_msg.retryRequestedPub.Publish));
 
         // Star 全取得 or リトライ要求まで毎フレーム更新
         while (!retryRequested && !_starMgr.AreAllStarsCollected)
@@ -51,8 +63,10 @@ public sealed class GameEntryPoint : IAsyncStartable, IDisposable
 
         if (retryRequested)
         {
+            retryDisposable.Dispose();
+            
             // 演出付きリトライを非同期 fire‑and‑forget
-            await _retryUseCase.RetryAsync();
+            await _retryUseCase.RetryAsync(ct);
         }
 
         // ── Result ────────────────────────────────────────

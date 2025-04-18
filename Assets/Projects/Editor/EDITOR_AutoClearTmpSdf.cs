@@ -38,7 +38,7 @@ public static class AutoClearTmpSdf
         }
 
         // いるかいらないか不明
-        //TMP_ResourceManager.ClearFontAssetGlyphCache();
+        TMP_ResourceManager.ClearFontAssetGlyphCache();
 
         AssetDatabase.SaveAssets();
         Debug.Log($"Cleared glyph tables in {guids.Length} TMP_FontAsset(s).");
