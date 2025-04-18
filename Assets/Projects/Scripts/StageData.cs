@@ -20,7 +20,11 @@ public class StageData : ScriptableObject
     [Header("ステージ毎のギミック")]
     public GimmickData[] gimmicks;
 
+    [Header("ステージ毎のギミック")]
     public GameObject previewActorPrefab;
+    
+    [Header("最終ステージ")]
+    public bool isLast;
 }
 
 [System.Serializable]

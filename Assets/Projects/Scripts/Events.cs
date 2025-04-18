@@ -9,3 +9,7 @@ public struct ActorLaunchedEvent
 public struct HitStarEvent
 {
 }
+
+public struct RetryEvent
+{
+}

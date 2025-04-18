@@ -1,5 +1,6 @@
 using UnityEngine;
 using MessagePipe;
+using R3;
 using VContainer;
 
 /// <summary>
@@ -70,5 +71,19 @@ public class InputService
         return new Vector2(
             Mathf.Cos(snappedAngle * Mathf.Deg2Rad),
             Mathf.Sin(snappedAngle * Mathf.Deg2Rad)) * snappedMag;
+    }
+
+    System.IDisposable _dispo;
+    
+    public void SetEnabled(bool p0)
+    {
+        if (p0)
+        {
+            _dispo = Observable.EveryUpdate().Subscribe(x => { Update(); });
+        }
+        else
+        {
+            _dispo?.Dispose();
+        }
     }
 }

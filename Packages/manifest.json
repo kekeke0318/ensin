@@ -7,6 +7,7 @@
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "com.openai.unity": "8.6.5",
     "com.unity.connect.share": "4.2.3",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.rider": "3.0.31",
@@ -47,12 +48,14 @@
       "name": "OpenUPM",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.cysharp"
+        "com.cysharp",
+        "com.openai",
+        "com.utilities"
       ]
     },
     {
       "name": "Unity NuGet",
-      "url": "https://unitynuget-registry.azurewebsites.net",
+      "url": "https://unitynuget-registry.openupm.com",
       "scopes": [
         "org.nuget"
       ]

@@ -20,8 +20,5 @@ MonoBehaviour:
     dialogueClear: a
     dialogueFail: b
     endingDialogue: c
-  gimmicks:
-  - gimmickPrefab: {fileID: 0}
-    position: {x: 0, y: 1, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
+  gimmicks: []
   previewActorPrefab: {fileID: 1970453099789913695, guid: c7dde020a3fb12e42b21f7e91901f5cc, type: 3}

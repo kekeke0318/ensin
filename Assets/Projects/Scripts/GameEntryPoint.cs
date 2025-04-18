@@ -1,32 +1,73 @@
+using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using VContainer;
 using VContainer.Unity;
+using MessagePipe;
 
-public class GameEntryPoint : IAsyncStartable
+public sealed class GameEntryPoint : IAsyncStartable, IDisposable
 {
-    // DI で取得した ActorManager、StarManager はシングルトンから取得可能（GlobalMessagePipe 経由や自前のシングルトン管理）
-    // ここでは簡単のため、LifetimeScope で登録された ActorManager を事前に初期化済みと仮定
+    // 依存
+    [Inject] InputService _input;
+    [Inject] ActorManager _actorMgr;
+    [Inject] StarManager _starMgr;
+    [Inject] StageManager _stageMgr;
+    [Inject] MotherPresenter _mother;
+    [Inject] GameData _gameData;
+    [Inject] StageData _stageData;
+    [Inject] GlobalMessage _msg;
 
-    [Inject] InputService _inputService;
-    [Inject] ActorManager _actorManager;
-    [Inject] StarManager _starManager;
-    [Inject] GlobalFactory _globalFactory;
+    // disposable
+    IDisposable _bag;
 
     public async UniTask StartAsync(CancellationToken ct)
     {
-        // シンプルな更新ループ例（実際は UniTask やコルーチンで実装）
-        while (ct.IsCancellationRequested == false)
+        var bag = DisposableBag.CreateBuilder();
+
+        // ── Intro ─────────────────────────────────────────
+        _input.SetEnabled(false);
+        await _mother.PresentIntroDialogue(); // 会話開始
+
+        // ── Aiming ────────────────────────────────────────
+        _input.SetEnabled(true);
+        await _msg.actorLaunchedSub.FirstAsync(ct); // 発射を待つ
+
+        // ── Flying ────────────────────────────────────────
+        _input.SetEnabled(false);
+
+        bool retryRequested = false;
+        _msg.retryRequestedSub.Subscribe(_ => retryRequested = true).AddTo(bag);
+
+        // Star 全取得 or リトライ要求まで毎フレーム更新
+        while (!retryRequested && !_starMgr.AreAllStarsCollected)
         {
-            // ここでイベントを受け取っていたらアクター生成
-            // if文を使わずUniRxもしくはUniTaskで実現したい
-            
             float dt = Time.deltaTime;
-            _inputService.Update();
-            _actorManager.Update(dt);
-            // starManager.Update(dt); // 必要なら更新処理を呼ぶ
-            await UniTask.Yield();
+            _actorMgr.Update(dt);
+            await UniTask.Yield(ct);
         }
+
+        // ── Result ────────────────────────────────────────
+        await _stageMgr.EvaluateStageAsync(ct);
+
+        // ── Next / Retry ──────────────────────────────────
+        string nextScene = SceneManager.GetActiveScene().name;
+        if (_starMgr.AreAllStarsCollected)
+        {
+            if (_stageData.isLast)
+            {
+                nextScene = $"{_gameData.endingSceneName}";
+            }
+            else
+            {
+                nextScene = $"Stage_{_stageData.stageID + 1}";
+            }
+        }
+
+        await SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Single);
+        _bag = bag.Build();
     }
+
+    public void Dispose() => _bag?.Dispose();
 }

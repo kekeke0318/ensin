@@ -31,8 +31,7 @@ public class GameLifetimeScope : LifetimeScope
         // GameEntryPoint 等のエントリーポイントは別途登録する
         builder.RegisterEntryPoint<GameEntryPoint>();
 
-        Star[] stars =
-            this.transform.GetComponentsInChildren<Star>(includeInactive: true);
+        Star[] stars = FindObjectsByType<Star>(FindObjectsSortMode.None);
 
         //配列をそのまま一つのインスタンスとして登録
         builder.RegisterInstance(stars)

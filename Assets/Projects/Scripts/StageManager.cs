@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
@@ -15,29 +16,21 @@ public class StageManager
     }
     
     // ステージの結果評価（非同期処理例）
-    public async UniTask EvaluateStageAsync()
+    public async UniTask EvaluateStageAsync(CancellationToken ct)
     {
         // StarManager 側で全 Star の取得を判定
         bool allCollected = starManager.AreAllStarsCollected;
         
         // 結果判定前に少し待機（演出のための余裕時間など）
-        await UniTask.Delay(500);
+        await UniTask.Delay(500, cancellationToken: ct);
         
         if (allCollected)
         {
-            // ここではステージID が仮に最終ステージならエンディング演出を実行する例
-            if(stageData.stageID >= 10)
-            {
-                motherPresenter.PresentEndingDialogue();
-            }
-            else
-            {
-                motherPresenter.PresentClearDialogue();
-            }
+            await motherPresenter.PresentClearDialogue();
         }
         else
         {
-            motherPresenter.PresentFailDialogue();
+            await motherPresenter.PresentFailDialogue();
         }
     }
 }

@@ -6,18 +6,17 @@ using MessagePipe;
 
 public class StarManager : Presenter
 {
-    [Inject] GlobalMessage _globalMessage;
-
     public bool AreAllStarsCollected => obtainedCount == starCountTotal;
     
     private int starCountTotal;
     int obtainedCount;
 
-    public void Initialize(int totalStars)
+    public StarManager(Star[] stars, GlobalMessage globalMessage)
     {
-        starCountTotal = totalStars;
+        starCountTotal = stars.Length;
+        EnsinLog.Info($"starCountTotal {starCountTotal}");
         
-        _globalMessage.hitStarSub.Subscribe(e =>
+        globalMessage.hitStarSub.Subscribe(e =>
         {
             obtainedCount++;
             if (obtainedCount >= starCountTotal)

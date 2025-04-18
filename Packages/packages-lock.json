@@ -51,6 +51,17 @@
       "dependencies": {},
       "hash": "fe31ad0904abee296b5ea72c6073157accba59e8"
     },
+    "com.openai.unity": {
+      "version": "8.6.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.utilities.rest": "3.3.3",
+        "com.utilities.websockets": "1.0.3",
+        "com.utilities.encoder.wav": "2.2.2"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.unity.2d.animation": {
       "version": "10.1.4",
       "depth": 1,
@@ -254,6 +265,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.recorder": {
       "version": "5.1.2",
       "depth": 0,
@@ -314,6 +332,74 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.utilities.async": {
+      "version": "2.2.2",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.test-framework": "1.4.2",
+        "com.unity.nuget.mono-cecil": "1.11.4"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.utilities.audio": {
+      "version": "2.2.3",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.modules.audio": "1.0.0",
+        "com.unity.modules.unitywebrequestaudio": "1.0.0",
+        "com.utilities.async": "2.2.2"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.utilities.encoder.wav": {
+      "version": "2.2.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.utilities.audio": "2.2.3"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.utilities.extensions": {
+      "version": "1.2.0",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.utilities.rest": {
+      "version": "3.3.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.utilities.async": "2.2.2",
+        "com.utilities.extensions": "1.2.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequestaudio": "1.0.0",
+        "com.unity.modules.unitywebrequesttexture": "1.0.0",
+        "com.unity.modules.unitywebrequestwww": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.utilities.websockets": {
+      "version": "1.0.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.utilities.async": "2.2.2",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "url": "https://package.openupm.com"
+    },
     "jp.hadashikick.vcontainer": {
       "version": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.15.3",
       "depth": 0,
@@ -328,7 +414,7 @@
       "dependencies": {
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.microsoft.bcl.timeprovider": {
       "version": "8.0.0",
@@ -337,7 +423,7 @@
       "dependencies": {
         "org.nuget.microsoft.bcl.asyncinterfaces": "6.0.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.r3": {
       "version": "1.2.9",
@@ -351,21 +437,21 @@
         "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0",
         "org.nuget.system.threading.channels": "8.0.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.buffers": {
       "version": "4.5.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.componentmodel.annotations": {
       "version": "5.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.memory": {
       "version": "4.5.5",
@@ -376,21 +462,21 @@
         "org.nuget.system.numerics.vectors": "4.4.0",
         "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.numerics.vectors": {
       "version": "4.4.0",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.runtime.compilerservices.unsafe": {
       "version": "6.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.threading.channels": {
       "version": "8.0.0",
@@ -399,7 +485,7 @@
       "dependencies": {
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "org.nuget.system.threading.tasks.extensions": {
       "version": "4.5.4",
@@ -408,7 +494,7 @@
       "dependencies": {
         "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://unitynuget-registry.openupm.com"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
