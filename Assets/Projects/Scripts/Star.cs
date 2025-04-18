@@ -1,8 +1,13 @@
+using System;
+using R3;
 using UnityEngine;
 
 public class Star : MonoBehaviour
 {
+    public Observable<Unit> OnHit => _onHit;
     public bool isCollected { get; private set; } = false;
+
+    Subject<Unit> _onHit = new ();
 
     public void Collect()
     {

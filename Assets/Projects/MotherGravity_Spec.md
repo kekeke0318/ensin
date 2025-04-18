@@ -56,8 +56,17 @@
 ## 🔧 技術方針
 
 - **ライブラリ**: UniTask, VContainer, DOTween, MessagePipe（全て使用）
-- **構造方針**: Logic / View の完全分離。MVPベースで拡張性確保。Actorの移動にはRigidBodyを使わない。
+
+- **構造方針**: 
+Logic / View の完全分離。MVPベースで拡張性確保。Actorの移動にはRigidBodyを使わない。
+ピュアクラスの初期化は基本的にコンストラクタにて、Injectするものを引数として渡す。
+MonoBehaviourクラス内でInjectおよびMessagePipeは行わず、以下のObservableパターンでイベントを定義する。
+例)
+public Observable<Unit> OnHit => _onHit;
+Subject<Unit> _onHit = new ();
+
 - **テスト方針**: ミニゲームのためテスト設計は省略する。Interfaceを定義する必要性は薄い。
+
 - **ステージ構成**: すべてのターゲットが一度の発射で取得できるよう設計。ギミックや重力の補助あり。ステージごとにシーンを用意する。
 
 ## 🧠 用語集
