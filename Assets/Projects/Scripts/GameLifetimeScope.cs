@@ -2,6 +2,7 @@ using VContainer;
 using VContainer.Unity;
 using MessagePipe;
 using UnityEngine;
+using System.Threading;
 
 public class GameLifetimeScope : LifetimeScope
 {
@@ -17,20 +18,23 @@ public class GameLifetimeScope : LifetimeScope
         // ピュアな Manager クラスをシングルトンとして登録
         builder.Register<GlobalFactory>(Lifetime.Singleton);
         builder.Register<GlobalMessage>(Lifetime.Singleton);
-        builder.Register<ActorManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-        builder.Register<StarManager>(Lifetime.Singleton);
-        builder.Register<MotherPresenter>(Lifetime.Singleton);
         builder.Register<StageManager>(Lifetime.Singleton);
         builder.Register<StageRetryUseCase>(Lifetime.Singleton);
-        builder.Register<RetryFxPresenter>(Lifetime.Singleton);
-        
+        builder.Register<CancellationTokenProvider>(Lifetime.Singleton).WithParameter(new CancellationTokenSource());
+        builder.Register<MotherPresenter>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<StarPresenter>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<ActorManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<RetryFxPresenter>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
         // Hierarchy
         builder.RegisterComponentInHierarchy<InputController>();
         builder.RegisterComponentInHierarchy<TrajectoryLineView>();
         builder.RegisterComponentInHierarchy<MainCameraView>();
         builder.RegisterComponentInHierarchy<MotherView>();
+        builder.RegisterComponentInHierarchy<ActorMessageView>();
         
         // GameEntryPoint 等のエントリーポイントは別途登録する
+        builder.RegisterEntryPoint<DialogueEntryPoint>();
         builder.RegisterEntryPoint<GameEntryPoint>();
 
         Star[] stars = FindObjectsByType<Star>(FindObjectsSortMode.None);
@@ -47,4 +51,10 @@ public class GameLifetimeScope : LifetimeScope
             },
             Lifetime.Singleton);
     }
+}
+
+public class CancellationTokenProvider
+{
+    public CancellationToken Token { get; }
+    public CancellationTokenProvider(CancellationTokenSource cst) => Token = cst.Token;
 }

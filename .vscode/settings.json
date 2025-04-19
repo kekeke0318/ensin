@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ensin2.sln"
+    "dotnet.defaultSolution": "ensin.sln",
+    "dotnet.preferCSharpExtension": true
 }

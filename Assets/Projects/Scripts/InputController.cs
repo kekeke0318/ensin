@@ -13,8 +13,7 @@ public class InputController : MonoBehaviour
     public Subject<ActorLaunchedEvent> OnShootInput { get; private set; } = new Subject<ActorLaunchedEvent>();
     public Subject<RetryEvent> OnRetryInput { get; private set; } = new Subject<RetryEvent>();
 
-    [SerializeField] TrajectoryLineView _trajectoryLineView;
-
+    TrajectoryLineView _trajectoryLineView;
     Vector2 _dragStartPos;
     bool isDragging;
     System.IDisposable _dispo;
@@ -23,6 +22,7 @@ public class InputController : MonoBehaviour
 
     public void SetTrajectoryLine(TrajectoryLineView trajectoryLineView)
     {
+        _trajectoryLineView = trajectoryLineView;
     }
 
     public void SetDragStartPos(Vector3 pos)

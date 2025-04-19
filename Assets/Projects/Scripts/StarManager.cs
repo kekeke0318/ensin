@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using R3;
 
-public class StarManager : Presenter
+public class StarPresenter : Presenter
 {
     public bool AreAllStarsCollected => obtainedCount == starCountTotal;
-    
+
     private int starCountTotal;
     int obtainedCount;
 
-    public StarManager(Star[] stars, GlobalMessage globalMessage)
+    public StarPresenter(Star[] stars, GlobalMessage globalMessage)
     {
         starCountTotal = stars.Length;
 
@@ -16,7 +16,7 @@ public class StarManager : Presenter
         {
             AddDisposable(item.OnHit.Subscribe(x =>
             {
-                EnsinLog.Info($"starCountTotal {obtainedCount}, {starCountTotal}");
+                EnsinLog.Info($"starCountTotal {obtainedCount}, {starCountTotal}");   
 
                 obtainedCount++;
             }));

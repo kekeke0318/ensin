@@ -1,13 +1,17 @@
 using System;
 using UnityEngine;
 using VContainer;
+using R3;
 
 [RequireComponent(typeof(Collider2D))]
 public class ActorView : MonoBehaviour, ICameraTarget
 {
+    public Observable<Unit> OnHit => _onHit;
     public Transform Transform { get; private set; }
     public Vector2 Position => transform.position;
-    
+
+    Subject<Unit> _onHit = new Subject<Unit>();
+
     Vector2 _velocity;
 
     void Awake()
@@ -33,7 +37,11 @@ public class ActorView : MonoBehaviour, ICameraTarget
     void OnTriggerEnter2D(Collider2D other)
     {
         var star = other.GetComponent<Star>();
-        if (star != null) star.Collect();
+        if (star != null)
+        {
+             star.Collect();
+            _onHit.OnNext(Unit.Default);
+        }
     }
 
     public void SetPosition(Vector2 pos)

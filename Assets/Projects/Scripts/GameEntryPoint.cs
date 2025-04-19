@@ -13,7 +13,7 @@ public sealed class GameEntryPoint : IInitializable, IAsyncStartable, IDisposabl
 {
     // 依存
     [Inject] ActorManager _actorMgr;
-    [Inject] StarManager _starMgr;
+    [Inject] StarPresenter _starMgr;
     [Inject] MainCameraView _mainCamera;
     [Inject] StageManager _stageMgr;
     [Inject] MotherPresenter _mother;
@@ -36,7 +36,6 @@ public sealed class GameEntryPoint : IInitializable, IAsyncStartable, IDisposabl
 
     public async UniTask StartAsync(CancellationToken ct)
     {
-
         var bag = DisposableBag.CreateBuilder();
 
         // ── Intro ─────────────────────────────────────────

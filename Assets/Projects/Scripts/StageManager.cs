@@ -4,11 +4,11 @@ using Cysharp.Threading.Tasks;
 
 public class StageManager
 {
-    private readonly StarManager starManager;
+    private readonly StarPresenter starManager;
     private readonly MotherPresenter motherPresenter;
     private readonly StageData stageData;
     
-    public StageManager(StarManager starManager, MotherPresenter motherPresenter, StageData stageData)
+    public StageManager(StarPresenter starManager, MotherPresenter motherPresenter, StageData stageData)
     {
         this.starManager = starManager;
         this.motherPresenter = motherPresenter;

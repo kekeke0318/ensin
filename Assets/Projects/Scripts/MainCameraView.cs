@@ -26,6 +26,8 @@ public class MainCameraView : MonoBehaviour
     {
         // Fallback if the camera reference wasn’t set in the Inspector
         if (_cam == null) _cam = GetComponent<Camera>();
+        
+        
     }
 
     void LateUpdate()
